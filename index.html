@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bharat Mobility - Rent. List. Move.</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <a href="index.html">
+                    <i class="fas fa-car"></i>
+                    <span>Bharat Mobility</span>
+                </a>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="pages/rent.html" class="nav-link">Rent</a>
+                <a href="pages/transport.html" class="nav-link">Transport</a>
+                <a href="pages/list-vehicle.html" class="nav-link">List Your Vehicle</a>
+                <a href="pages/drivers.html" class="nav-link">Drivers</a>
+                <a href="#" class="nav-link">My Bookings</a>
+            </div>
+            <div class="nav-auth">
+                <button class="auth-btn login-btn" onclick="openLoginModal()">Login</button>
+                <button class="auth-btn signup-btn" onclick="openSignupModal()">Sign Up</button>
+            </div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Rent a Vehicle. Earn From Your Vehicle. Move What Matters.</h1>
+            <p>From cycles and bikes to cars, vans and trucks — find the right vehicle for every journey.</p>
+            
+            <!-- Search Box -->
+            <div class="search-box">
+                <div class="search-field">
+                    <label>Pickup Location</label>
+                    <div class="input-group">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <input type="text" placeholder="Enter city or location" id="pickupLocation">
+                    </div>
+                </div>
+                <div class="search-field">
+                    <label>Start Date & Time</label>
+                    <div class="input-group">
+                        <i class="fas fa-calendar"></i>
+                        <input type="datetime-local" id="startDateTime">
+                    </div>
+                </div>
+                <div class="search-field">
+                    <label>Return Date & Time</label>
+                    <div class="input-group">
+                        <i class="fas fa-calendar"></i>
+                        <input type="datetime-local" id="returnDateTime">
+                    </div>
+                </div>
+                <div class="search-field">
+                    <label>Vehicle Type</label>
+                    <select id="vehicleType" onchange="updateDriverOption()">
+                        <option value="">Select vehicle type</option>
+                        <option value="cycle">Cycle</option>
+                        <option value="bike">Bike</option>
+                        <option value="scooter">Scooter</option>
+                        <option value="car">Car</option>
+                        <option value="suv">SUV</option>
+                        <option value="van">Van</option>
+                        <option value="tempo">Tempo Traveller</option>
+                        <option value="bus">Bus</option>
+                        <option value="pickup">Pickup</option>
+                        <option value="truck">Truck</option>
+                    </select>
+                </div>
+                <div class="search-field" id="driverFieldContainer" style="display: none;">
+                    <label>Driver Required?</label>
+                    <div class="driver-options">
+                        <label class="radio-label">
+                            <input type="radio" name="driver" value="yes"> Yes, I need a driver
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="driver" value="no" checked> No, I will drive
+                        </label>
+                    </div>
+                </div>
+                <button class="search-btn" onclick="searchVehicles()">SEARCH VEHICLES</button>
+            </div>
+        </div>
+        <div class="hero-overlay"></div>
+    </section>
+
+    <!-- Vehicle Categories Section -->
+    <section class="categories">
+        <div class="container">
+            <h2>Explore Our Fleet</h2>
+            <p class="section-subtitle">Choose the perfect vehicle for your journey</p>
+            
+            <div class="categories-grid">
+                <div class="category-card" onclick="filterByCategory('cycle')">
+                    <div class="category-icon">🚲</div>
+                    <h3>Cycles</h3>
+                    <p>Standard • Mountain • Road • Electric</p>
+                    <a href="pages/rent.html?category=cycle" class="view-link">View Vehicles →</a>
+                </div>
+                <div class="category-card" onclick="filterByCategory('bike')">
+                    <div class="category-icon">🏍️</div>
+                    <h3>Bikes & Scooters</h3>
+                    <p>Scooter • Motorcycle • Electric</p>
+                    <a href="pages/rent.html?category=bike" class="view-link">View Vehicles →</a>
+                </div>
+                <div class="category-card" onclick="filterByCategory('car')">
+                    <div class="category-icon">🚗</div>
+                    <h3>Cars</h3>
+                    <p>Hatchback • Sedan • SUV • Luxury</p>
+                    <a href="pages/rent.html?category=car" class="view-link">View Vehicles →</a>
+                </div>
+                <div class="category-card" onclick="filterByCategory('van')">
+                    <div class="category-icon">🚐</div>
+                    <h3>Vans & Buses</h3>
+                    <p>Van • Tempo Traveller • Mini Bus</p>
+                    <a href="pages/rent.html?category=van" class="view-link">View Vehicles →</a>
+                </div>
+                <div class="category-card" onclick="filterByCategory('commercial')">
+                    <div class="category-icon">🚚</div>
+                    <h3>Commercial Vehicles</h3>
+                    <p>Pickup • Mini Truck • Truck</p>
+                    <a href="pages/rent.html?category=commercial" class="view-link">View Vehicles →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Vehicles -->
+    <section class="popular-vehicles">
+        <div class="container">
+            <h2>Popular Vehicles Near You</h2>
+            <div class="vehicles-grid">
+                <div class="vehicle-card">
+                    <div class="vehicle-image">
+                        <img src="https://via.placeholder.com/300x200?text=Mahindra+Scorpio" alt="Mahindra Scorpio">
+                        <span class="badge-verified">✓ Verified</span>
+                    </div>
+                    <div class="vehicle-info">
+                        <h3>Mahindra Scorpio N</h3>
+                        <div class="rating">
+                            <span class="stars">⭐ 4.8</span>
+                            <span class="reviews">(86 reviews)</span>
+                        </div>
+                        <p class="location">📍 Kolkata</p>
+                        <p class="price">₹2,500/day</p>
+                        <p class="specs">7 Seats | Diesel | Automatic | AC</p>
+                        <div class="features">
+                            <span class="feature">🚗 Driver Available</span>
+                            <span class="feature">✓ 250 km included</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-secondary" onclick="viewDetails()">View Details</button>
+                            <button class="btn-primary" onclick="bookVehicle()">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vehicle-card">
+                    <div class="vehicle-image">
+                        <img src="https://via.placeholder.com/300x200?text=Toyota+Innova" alt="Toyota Innova">
+                        <span class="badge-verified">✓ Verified</span>
+                    </div>
+                    <div class="vehicle-info">
+                        <h3>Toyota Innova Crysta</h3>
+                        <div class="rating">
+                            <span class="stars">⭐ 4.9</span>
+                            <span class="reviews">(124 reviews)</span>
+                        </div>
+                        <p class="location">📍 Delhi</p>
+                        <p class="price">₹3,200/day</p>
+                        <p class="specs">8 Seats | Diesel | Automatic | AC</p>
+                        <div class="features">
+                            <span class="feature">🚗 Driver Available</span>
+                            <span class="feature">✓ 300 km included</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-secondary" onclick="viewDetails()">View Details</button>
+                            <button class="btn-primary" onclick="bookVehicle()">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vehicle-card">
+                    <div class="vehicle-image">
+                        <img src="https://via.placeholder.com/300x200?text=Hero+Motorcycle" alt="Hero Motorcycle">
+                        <span class="badge-verified">✓ Verified</span>
+                    </div>
+                    <div class="vehicle-info">
+                        <h3>Hero Passion Pro</h3>
+                        <div class="rating">
+                            <span class="stars">⭐ 4.7</span>
+                            <span class="reviews">(56 reviews)</span>
+                        </div>
+                        <p class="location">📍 Mumbai</p>
+                        <p class="price">₹700/day</p>
+                        <p class="specs">110cc | Petrol | Manual</p>
+                        <div class="features">
+                            <span class="feature">🏍️ No Driver</span>
+                            <span class="feature">✓ Unlimited km</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-secondary" onclick="viewDetails()">View Details</button>
+                            <button class="btn-primary" onclick="bookVehicle()">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Need a Vehicle Section -->
+    <section class="need-vehicle">
+        <div class="container">
+            <div class="cta-section">
+                <div class="cta-content">
+                    <h2>Need a Vehicle?</h2>
+                    <p>Find and book verified vehicles near you. Safe, reliable, and transparent.</p>
+                    <a href="pages/rent.html" class="btn-large">Find a Vehicle</a>
+                </div>
+                <div class="cta-image">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Have a Vehicle Section -->
+    <section class="have-vehicle">
+        <div class="container">
+            <div class="cta-section reverse">
+                <div class="cta-image">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="cta-content">
+                    <h2>Have a Vehicle?</h2>
+                    <p>Turn your idle vehicle into an income-generating asset. Join thousands of vehicle owners earning with Bharat Mobility.</p>
+                    <a href="pages/list-vehicle.html" class="btn-large">List Your Vehicle</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2>How It Works</h2>
+            
+            <div class="how-it-works-grid">
+                <div class="how-section">
+                    <h3>For Renters</h3>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <h4>Search</h4>
+                            <p>Find a vehicle that matches your needs and budget.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <h4>Book</h4>
+                            <p>Choose self-drive or hire a driver for safety.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <h4>Ride</h4>
+                            <p>Pick up and enjoy your journey with confidence.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="how-section">
+                    <h3>For Vehicle Owners</h3>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <h4>List</h4>
+                            <p>Add your vehicle with photos and pricing.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <h4>Get Bookings</h4>
+                            <p>Customers book your vehicle instantly.</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <h4>Earn</h4>
+                            <p>Receive your rental income directly to your account.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust & Safety -->
+    <section class="trust-safety">
+        <div class="container">
+            <h2>Why Rent With Us?</h2>
+            <div class="trust-grid">
+                <div class="trust-item">
+                    <i class="fas fa-check-circle"></i>
+                    <h4>Verified Vehicles</h4>
+                    <p>All vehicles are verified and inspected</p>
+                </div>
+                <div class="trust-item">
+                    <i class="fas fa-check-circle"></i>
+                    <h4>Verified Owners</h4>
+                    <p>All owners are verified and trusted</p>
+                </div>
+                <div class="trust-item">
+                    <i class="fas fa-check-circle"></i>
+                    <h4>Verified Drivers</h4>
+                    <p>All drivers are licensed and background checked</p>
+                </div>
+                <div class="trust-item">
+                    <i class="fas fa-check-circle"></i>
+                    <h4>Before & After Inspection</h4>
+                    <p>Vehicle condition recorded with photos</p>
+                </div>
+                <div class="trust-item">
+                    <i class="fas fa-check-circle"></i>
+                    <h4>Secure Payments</h4>
+                    <p>All payments encrypted and secure</p>
+                </div>
+                <div class="trust-item">
+                    <i class="fas fa-check-circle"></i>
+                    <h4>Clear Damage Policy</h4>
+                    <p>Evidence-based damage claims</p>
+                </div>
+                <div class="trust-item">
+                    <i class="fas fa-check-circle"></i>
+                    <h4>Ratings & Reviews</h4>
+                    <p>Real feedback from real users</p>
+                </div>
+                <div class="trust-item">
+                    <i class="fas fa-check-circle"></i>
+                    <h4>24/7 Support</h4>
+                    <p>Round-the-clock customer support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Transport Section -->
+    <section class="transport-section">
+        <div class="container">
+            <h2>Move Goods Across India</h2>
+            <p class="section-subtitle">Book the right commercial vehicle for your transportation needs</p>
+            <a href="pages/transport.html" class="btn-large">Explore Transport Services</a>
+        </div>
+    </section>
+
+    <!-- Drivers Section -->
+    <section class="drivers-section">
+        <div class="container">
+            <h2>Our Trusted Drivers</h2>
+            <p class="section-subtitle">Verified, licensed, and professional</p>
+            <a href="pages/drivers.html" class="btn-large">Find a Driver</a>
+        </div>
+    </section>
+
+    <!-- Featured Locations -->
+    <section class="featured-locations">
+        <div class="container">
+            <h2>Available in Major Indian Cities</h2>
+            <div class="locations-grid">
+                <div class="location-card">🌆 Kolkata</div>
+                <div class="location-card">🏔️ Siliguri</div>
+                <div class="location-card">⛰️ Darjeeling</div>
+                <div class="location-card">🏞️ Gangtok</div>
+                <div class="location-card">🏛️ Delhi</div>
+                <div class="location-card">🌊 Mumbai</div>
+                <div class="location-card">🌳 Bengaluru</div>
+                <div class="location-card">🏙️ Hyderabad</div>
+                <div class="location-card">🐚 Chennai</div>
+                <div class="location-card">🎢 Pune</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h4>How do I book a vehicle?</h4>
+                    <p>Simply search for a vehicle, select your dates, and proceed to booking. Choose self-drive or hire a driver.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Is security deposit refundable?</h4>
+                    <p>Yes, security deposit is fully refundable after vehicle inspection, subject to no damage claims.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>What is your damage policy?</h4>
+                    <p>All damage is evidence-based with photos. Customers can dispute claims through our transparent process.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>How do I list my vehicle?</h4>
+                    <p>Complete our verification process, upload documents and photos, set pricing, and publish your listing.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>What payment methods do you accept?</h4>
+                    <p>We accept UPI, Debit/Credit Cards, and Net Banking. UPI is our primary payment method.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Can I cancel my booking?</h4>
+                    <p>Yes, cancellations are allowed with our cancellation policy. Check terms before booking.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Rentals</h4>
+                    <ul>
+                        <li><a href="pages/rent.html?category=cycle">Cycles</a></li>
+                        <li><a href="pages/rent.html?category=bike">Bikes</a></li>
+                        <li><a href="pages/rent.html?category=car">Cars</a></li>
+                        <li><a href="pages/rent.html?category=suv">SUVs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Transport</h4>
+                    <ul>
+                        <li><a href="pages/transport.html">Trucks</a></li>
+                        <li><a href="pages/transport.html">Goods Transport</a></li>
+                        <li><a href="pages/drivers.html">Drivers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Safety</a></li>
+                        <li><a href="#">Damage Policy</a></li>
+                        <li><a href="#">Cancellation Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Bharat Mobility. All rights reserved. Rent. List. Move.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>Login to Bharat Mobility</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <div class="input-group">
+                        <span>+91</span>
+                        <input type="tel" placeholder="Enter 10-digit number" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Send OTP</button>
+                <p class="form-note">Don't have an account? <a href="#" onclick="toggleModal()">Sign up here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeSignupModal()">&times;</span>
+            <h2>Create Your Account</h2>
+            <form onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <div class="input-group">
+                        <span>+91</span>
+                        <input type="tel" placeholder="Enter 10-digit number" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>I am a:</label>
+                    <div class="radio-options">
+                        <label class="radio-label">
+                            <input type="radio" name="userType" value="customer" checked> Customer (Renting)
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="userType" value="owner"> Vehicle Owner
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Create Account</button>
+                <p class="form-note">Already have an account? <a href="#" onclick="toggleModal()">Login here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
